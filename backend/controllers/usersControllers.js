@@ -12,7 +12,7 @@ const login = asyncHandler( async(req,res) => {
     if (user && (await bcrypt.compare(password,user.password))) {
         res.status(200).json({
             _id: user.id,
-            nombre: user.nombre,
+            name: user.name,
             email: user.email,
             token: generarToken(user._id)
         })
@@ -22,10 +22,10 @@ const login = asyncHandler( async(req,res) => {
 
 const register = asyncHandler(async(req,res) => {
     //desestructuramos el body
-    const {nombre, email, password} = req.body
+    const {name, email, password} = req.body
     
     //verificamos que nos pasen todos los campos
-    if (!nombre || !email || !password) {
+    if (!name || !email || !password) {
         res.status(400)
         throw new Error('Faltan datos')
     }
@@ -42,7 +42,7 @@ const register = asyncHandler(async(req,res) => {
 
         //crear el usuario
         const user = await User.create({
-            nombre,
+            name,
             email,
             password: passwordHashed
         })
@@ -51,7 +51,7 @@ const register = asyncHandler(async(req,res) => {
         if (user) {
             res.status(201).json({
                 _id: user.id,
-                nombre: user.nombre,
+                name: user.name,
                 email: user.email,
                 password: user.password
             })
